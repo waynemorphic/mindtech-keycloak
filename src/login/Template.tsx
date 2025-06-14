@@ -1,0 +1,204 @@
+import { useEffect } from "react";
+import { clsx } from "keycloakify/tools/clsx";
+import { kcSanitize } from "keycloakify/lib/kcSanitize";
+import type { TemplateProps } from "keycloakify/login/TemplateProps";
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import { useSetClassName } from "keycloakify/tools/useSetClassName";
+import { useInitialize } from "keycloakify/login/Template.useInitialize";
+import type { I18n } from "./i18n";
+import type { KcContext } from "./KcContext";
+
+export default function Template(props: TemplateProps<KcContext, I18n>) {
+    const {
+        displayInfo = false,
+        displayMessage = true,
+        displayRequiredFields = false,
+        headerNode,
+        socialProvidersNode = null,
+        infoNode = null,
+        documentTitle,
+        bodyClassName,
+        kcContext,
+        i18n,
+        doUseDefaultCss,
+        classes,
+        children
+    } = props;
+
+    const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
+
+    const { msg, msgStr, enabledLanguages } = i18n;
+
+    const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
+
+    useEffect(() => {
+        document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
+    }, []);
+
+    useSetClassName({
+        qualifiedName: "html",
+        className: kcClsx("kcHtmlClass")
+    });
+
+    useSetClassName({
+        qualifiedName: "body",
+        className: bodyClassName ?? kcClsx("kcBodyClass")
+    });
+
+    const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
+
+    if (!isReadyToRender) {
+        return null;
+    }
+
+    return (
+        <div className={clsx(kcClsx("kcLoginClass"), "flex flex-col md:flex-row min-h-screen")}>
+            <div className={"flex-1 flex flex-col justify-center items-center md:max-w-1/2 sm:max-w-full "}>
+                <section className={"md:p-8"}>
+                    <div className={"md:mx-auto"} id={"logo"}>
+                        <img src={"src/login/assets/Mindtech_Logo.svg"} alt={"Mindtech Logo"}/>
+                    </div>
+                    <div className={"first-left-pane-heading"}>
+                        <p>Connectez-vous à votre espace sécurisé pour accéder à vos ressources personnalisées.</p>
+                    </div>
+                    <div className={"second-left-pane-heading"}>
+                        <p className={""}>Retrouvez votre portail client, vos tableaux de bord, notre base documentaire, les événements partenaires, etc..</p>
+                    </div>
+                </section>
+            </div>
+            <div className={clsx(kcClsx("kcFormCardClass"), "flex-1 flex-col md:max-w-1/2 justify-center items-start bg-[#fff] shadow-xl p-8 md:p-14 md:max-xl:rounded-tl-2xl md:max-xl:rounded-bl-2xl rounded-t-2xl")}>
+                <section className={"md:p-30 md:mt-10"}>
+                <header className={kcClsx("kcFormHeaderClass")}>
+                    {enabledLanguages.length > 1 && (
+                        <div className={kcClsx("kcLocaleMainClass")} id="kc-locale">
+                            <div id="kc-locale-wrapper" className={kcClsx("kcLocaleWrapperClass")}>
+                                <div id="kc-locale-dropdown" className={clsx("menu-button-links", kcClsx("kcLocaleDropDownClass"))}>
+                                    {/*Button for language selection. By default, Keycloak translates the page to the selected language variant*/}
+                                    {/*<button*/}
+                                    {/*    tabIndex={1}*/}
+                                    {/*    id="kc-current-locale-link"*/}
+                                    {/*    aria-label={msgStr("languages")}*/}
+                                    {/*    aria-haspopup="true"*/}
+                                    {/*    aria-expanded="false"*/}
+                                    {/*    aria-controls="language-switch1"*/}
+                                    {/*>*/}
+                                    {/*    {currentLanguage.label}*/}
+                                    {/*</button>*/}
+                                    <ul
+                                        role="menu"
+                                        tabIndex={-1}
+                                        aria-labelledby="kc-current-locale-link"
+                                        aria-activedescendant=""
+                                        id="language-switch1"
+                                        className={kcClsx("kcLocaleListClass")}
+                                    >
+                                        {enabledLanguages.map(({ languageTag, label, href }, i) => (
+                                            <li key={languageTag} className={kcClsx("kcLocaleListItemClass")} role="none">
+                                                <a role="menuitem" id={`language-${i + 1}`} className={kcClsx("kcLocaleItemClass")} href={href}>
+                                                    {label}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {(() => {
+                        const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
+                            <h1 id="kc-page-title">{headerNode}</h1>
+                        ) : (
+                            <div id="kc-username" className={kcClsx("kcFormGroupClass")}>
+                                <label id="kc-attempted-username">{auth.attemptedUsername}</label>
+                                <a id="reset-login" href={url.loginRestartFlowUrl} aria-label={msgStr("restartLoginTooltip")}>
+                                    <div className="kc-login-tooltip">
+                                        <i className={kcClsx("kcResetFlowIcon")}></i>
+                                        <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        );
+
+                        if (displayRequiredFields) {
+                            return (
+                                <div className={kcClsx("kcContentWrapperClass")}>
+                                    <div className={clsx(kcClsx("kcLabelWrapperClass"), "subtitle")}>
+                                        <span className="subtitle">
+                                            <span className="required">*</span>
+                                            {msg("requiredFields")}
+                                        </span>
+                                    </div>
+                                    <div className="col-md-10">{node}</div>
+                                </div>
+                            );
+                        }
+
+                        return node;
+                    })()}
+                </header>
+                <div id="kc-content">
+                    <div id="kc-content-wrapper">
+                        {/* App-initiated actions should not see warning messages about the need to complete the action during login. */}
+                        {displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction) && (
+                            <div
+                                className={clsx(
+                                    `alert-${message.type}`,
+                                    kcClsx("kcAlertClass"),
+                                    `pf-m-${message?.type === "error" ? "danger" : message.type}`
+                                )}
+                            >
+                                <div className="pf-c-alert__icon">
+                                    {message.type === "success" && <span className={kcClsx("kcFeedbackSuccessIcon")}></span>}
+                                    {message.type === "warning" && <span className={kcClsx("kcFeedbackWarningIcon")}></span>}
+                                    {message.type === "error" && <span className={kcClsx("kcFeedbackErrorIcon")}></span>}
+                                    {message.type === "info" && <span className={kcClsx("kcFeedbackInfoIcon")}></span>}
+                                </div>
+                                <span
+                                    className={kcClsx("kcAlertTitleClass")}
+                                    dangerouslySetInnerHTML={{
+                                        __html: kcSanitize(message.summary)
+                                    }}
+                                />
+                            </div>
+                        )}
+                        {children}
+                        {auth !== undefined && auth.showTryAnotherWayLink && (
+                            <form id="kc-select-try-another-way-form" action={url.loginAction} method="post">
+                                <div className={kcClsx("kcFormGroupClass")}>
+                                    <input type="hidden" name="tryAnotherWay" value="on" />
+                                    <a
+                                        href="#"
+                                        id="try-another-way"
+                                        onClick={() => {
+                                            document.forms["kc-select-try-another-way-form" as never].submit();
+                                            return false;
+                                        }}
+                                    >
+                                        {msg("doTryAnotherWay")}
+                                    </a>
+                                </div>
+                            </form>
+                        )}
+                        {socialProvidersNode}
+                        {displayInfo && (
+                            <div id="kc-info" className={clsx(kcClsx("kcSignUpClass"), "p-4")}>
+                                <div className={clsx(kcClsx("kcInfoAreaWrapperClass"), "bg-transparent text-center text-[#18px]")}>
+                                    {infoNode}
+                                </div>
+                                <div className={"md:p-2 mt-10"}>
+                                    <p className={"text-[9px] md:text-[12px] text-[#1E1E1E] text-center"}>
+                                        If you encounter any issues or need assistance, please contact our support team at: <span onClick={() => window.location.href='mailto:contact@mind-tech.fr'} className={"underline font-bold"}>contact@mind-tech.fr</span>  or call us at:<span className={"underline font-bold"}> 09 78 25 40 80</span> .
+                                    </p>
+                                </div>
+                                <div className={"-mb-5 mt-5"}>
+                                    <p className={"text-[#939393] text-center"}>Powered by Mindtech</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                </section>
+            </div>
+        </div>
+    );
+}

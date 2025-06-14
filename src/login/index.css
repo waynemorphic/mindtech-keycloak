@@ -1,0 +1,140 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+@theme {
+  --font-raleway: "Raleway", sans-serif;
+}
+
+body.kcBodyClass {
+  background: #0F0B3A url("./assets/Background_vectors.svg") no-repeat left top;
+  font-family: 'Raleway', sans-serif;
+
+}
+
+/*Mobile devices*/
+@media screen and (max-width:640px) {
+  body.kcBodyClass {
+    background: #0F0B3A url("./assets/Background_vectors.svg") no-repeat right center;
+
+  }
+  #logo {
+    margin-top: 5%;
+    margin-inline: auto;
+    width: 50%;
+    height: fit-content;
+    margin-bottom: 2%;
+    padding: 0.2%;
+    display: flex;
+    gap: 20%;
+  }
+
+  .first-left-pane-heading{
+    font-family: 'Raleway', sans-serif;
+    padding: 2%;
+    text-align: center;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 125%;
+    letter-spacing: 0.2px;
+  }
+
+  .second-left-pane-heading {
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    /*margin-top: -10%;*/
+    /*margin-bottom: -20%;*/
+    font-size: 10px;
+    font-weight: lighter;
+    line-height: 125%;
+    padding: 2%;
+    color: #ffffff;
+  }
+
+  #kc-page-title{
+    font-size: 22px;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #000000;
+    font-family: 'Raleway', sans-serif;
+  }
+}
+
+/*Laptops at-least 15inch*/
+@media screen and (min-width:768px) {
+  body.kcBodyClass {
+    height: 100%;
+    overflow: auto;
+  }
+
+  .first-left-pane-heading{
+    font-family: 'Raleway', sans-serif;
+    margin-top: 10%;
+    font-weight: 600;
+    line-height: 125%;
+    letter-spacing: 0.2px;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 2rem;
+  }
+  .first-left-pane-heading p {
+    padding: 2%;
+  }
+
+  .second-left-pane-heading{
+    font-family: 'Raleway', sans-serif;
+    margin-top: 2%;
+    font-weight: lighter;
+    line-height: 125%;
+    color: #ffffff;
+    font-size: 1rem;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .second-left-pane-heading p{
+    padding: 2%;
+  }
+
+  #kc-page-title {
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+    font-family: 'Raleway', sans-serif;
+    margin-bottom: 10%;
+  }
+  #logo {
+    width: 35% !important;
+    height: 35%;
+    margin-top: -33%;
+    margin-bottom: 35%;
+  }
+}
+
+.password-icon {
+  background: url("./assets/Password_vector.svg") no-repeat center center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.email-icon{
+  background: no-repeat center center url("./assets/Email_vector_icon_gray.svg") ;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  pointer-events: none;
+}
