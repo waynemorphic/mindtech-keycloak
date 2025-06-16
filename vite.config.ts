@@ -8,7 +8,13 @@ export default defineConfig({
         react(),
         keycloakify({
             accountThemeImplementation: "none",
-            themeName: "MindTech"
+            themeName: "Mindtech",
+            environmentVariables: [
+                { name: "BACKGROUND_LOGO_URL", default:"" }
+            ],
+            kcContextExclusionsFtl: [
+                '<@addToXKeycloakifyMessagesIfMessageKey str="backgroundLogoUrl" />'
+            ].join(".\n")
         })
     ]
 });
