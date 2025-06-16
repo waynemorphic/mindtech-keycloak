@@ -27,9 +27,11 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
 
-    const { msg, msgStr, enabledLanguages } = i18n;
+    const { msg, msgStr, enabledLanguages, advancedMsgStr } = i18n;
 
     const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
+
+    const backgroundLogoUrl = advancedMsgStr("backgroundLogoUrl") !== "backgroundLogoUrl" ? advancedMsgStr("backgroundLogoUrl") : null;
 
     useEffect(() => {
         document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
@@ -53,21 +55,23 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <div className={clsx(kcClsx("kcLoginClass"), "flex flex-col md:flex-row min-h-screen")}>
-            <div className={"flex-1 flex flex-col justify-center items-center md:max-w-1/2 sm:max-w-full "}>
+            <div className={"flex flex-col justify-center items-center md:w-1/2"}>
                 <section className={"md:p-8"}>
-                    <div className={"md:mx-auto"} id={"logo"}>
-                        <img src={"src/login/assets/Mindtech_Logo.svg"} alt={"Mindtech Logo"}/>
-                    </div>
-                    <div className={"first-left-pane-heading"}>
+                        {( backgroundLogoUrl || kcContext.properties["BACKGROUND_LOGO_URL"]) && (
+                            <div className={"md:mx-auto"} id={"logo"}>
+                                <img src={backgroundLogoUrl || kcContext.properties["BACKGROUND_LOGO_URL"] || "src/login/assets/Mindtech_Logo.svg"} alt={"Mindtech Logo"}/>
+                            </div>
+                        )}
+                    <div className={"first-left-pane-heading text-[#ffffff] text-center text-[16px] font-[Raleway] font-bold"}>
                         <p>Connectez-vous à votre espace sécurisé pour accéder à vos ressources personnalisées.</p>
                     </div>
-                    <div className={"second-left-pane-heading"}>
+                    <div className={"second-left-pane-heading text-[#ffffff] text-center text-[10px] font-[Raleway] font-lighter"}>
                         <p className={""}>Retrouvez votre portail client, vos tableaux de bord, notre base documentaire, les événements partenaires, etc..</p>
                     </div>
                 </section>
             </div>
-            <div className={clsx(kcClsx("kcFormCardClass"), "flex-1 flex-col md:max-w-1/2 justify-center items-start bg-[#fff] shadow-xl p-8 md:p-14 md:max-xl:rounded-tl-2xl md:max-xl:rounded-bl-2xl rounded-t-2xl")}>
-                <section className={"md:p-30 md:mt-10"}>
+            <div className={clsx(kcClsx("kcFormCardClass"), "flex flex-col md:w-1/2 bg-[#fff] shadow-xl p-8 md:p-14 md:rounded-tl-2xl md:rounded-bl-2xl")}>
+                <section className={"md:p-2 md:mt-2 md:w-full"}>
                 <header className={kcClsx("kcFormHeaderClass")}>
                     {enabledLanguages.length > 1 && (
                         <div className={kcClsx("kcLocaleMainClass")} id="kc-locale">
@@ -181,12 +185,12 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                         )}
                         {socialProvidersNode}
                         {displayInfo && (
-                            <div id="kc-info" className={clsx(kcClsx("kcSignUpClass"), "p-4")}>
+                            <div id="kc-info" className={clsx(kcClsx("kcSignUpClass"), "p-8 md:ml-10")}>
                                 <div className={clsx(kcClsx("kcInfoAreaWrapperClass"), "bg-transparent text-center text-[#18px]")}>
                                     {infoNode}
                                 </div>
                                 <div className={"md:p-2 mt-10"}>
-                                    <p className={"text-[9px] md:text-[12px] text-[#1E1E1E] text-center"}>
+                                    <p className={"text-[9px] md:text-[10px] text-[#1E1E1E] text-center"}>
                                         If you encounter any issues or need assistance, please contact our support team at: <span onClick={() => window.location.href='mailto:contact@mind-tech.fr'} className={"underline font-bold"}>contact@mind-tech.fr</span>  or call us at:<span className={"underline font-bold"}> 09 78 25 40 80</span> .
                                     </p>
                                 </div>

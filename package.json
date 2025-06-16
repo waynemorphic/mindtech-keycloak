@@ -1,10 +1,10 @@
 {
-    "name": "keycloakify-starter",
-    "version": "0.0.0",
-    "description": "Starter for Keycloakify 11",
+    "name": "Mindtech",
+    "version": "1.0.0",
+    "description": "Mindtech Keycloak Theme",
     "repository": {
         "type": "git",
-        "url": "git://github.com/codegouvfr/keycloakify-starter.git"
+        "url": "git@github.com:waynemorphic/mindtech-keycloak.git"
     },
     "type": "module",
     "scripts": {
