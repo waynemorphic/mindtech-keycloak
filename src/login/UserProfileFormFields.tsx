@@ -307,7 +307,7 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
                 })()}
                 className={clsx(
                     kcClsx("kcInputClass"),
-                    "block pl-12 focus:outline-none border-1 p-3 border-[#A3A3A3] mt-1 rounded-xl w-full focus:border-[#E8792C] focus:ring focus:ring-[#E8792C] focus:ring-opacity-50 sm:text-sm"
+                    "block focus:outline-none border-1 p-3 border-[#A3A3A3] mt-1 rounded-xl w-full focus:border-[#E8792C] focus:ring focus:ring-[#E8792C] focus:ring-opacity-50 sm:text-sm"
                 )}
                 aria-invalid={displayableErrors.find(error => error.fieldIndex === fieldIndex) !== undefined}
                 disabled={attribute.readOnly}

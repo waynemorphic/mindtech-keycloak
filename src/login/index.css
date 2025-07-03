@@ -10,19 +10,22 @@
 }
 
 body.kcBodyClass {
-  background: #0F0B3A url("./assets/Background_vectors.svg") no-repeat left;
+  background: #0F0B3A url("./assets/Background_vectors.svg");
   font-family: 'Raleway', sans-serif;
 }
 
 /*Mobile devices*/
 @media screen and (max-width: 640px) {
   body.kcBodyClass {
-    background: #0F0B3A url("./assets/Background_vectors.svg") no-repeat right center;
+    background: #0F0B3A url("./assets/Background_vectors.svg") no-repeat top center;
   }
 
   .kcFormCardClass {
     border-top-left-radius: var(--radius-2xl) /* 1rem = 16px */;
     border-top-right-radius: var(--radius-2xl) /* 1rem = 16px */;
+    height: 100vh;
+    display: flex;
+    justify-content: start;
   }
 
   #logo {
@@ -71,22 +74,17 @@ body.kcBodyClass {
 @media screen and (min-width: 768px) {
   body.kcBodyClass {
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .first-left-pane-heading {
     font-family: 'Raleway', sans-serif;
-    margin-top: 10%;
     font-weight: 600;
     line-height: 125%;
     letter-spacing: 0.2px;
     color: #FFFFFF;
     text-align: center;
     font-size: 2rem;
-  }
-
-  .first-left-pane-heading p {
-    padding: 4%;
   }
 
   .second-left-pane-heading {
@@ -101,8 +99,7 @@ body.kcBodyClass {
   }
 
   .second-left-pane-heading p {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding: 3%
   }
 
   #kc-page-title {
@@ -111,14 +108,11 @@ body.kcBodyClass {
     text-align: center;
     color: #000000;
     font-family: 'Raleway', sans-serif;
-    margin-bottom: 10%;
   }
 
   #logo {
     width: 35% !important;
     height: 35%;
-    margin-top: -33%;
-    margin-bottom: 35%;
   }
 }
 

@@ -1,58 +1,47 @@
-<p align="center">
-    <i>🚀 <a href="https://keycloakify.dev">Keycloakify</a> v11 starter 🚀</i>
-    <br/>
-    <br/>
-</p>
+## Set-Up Instructions
 
-# Quick start
+These are instructions on how to set-up the custom theme via a Dockerfile.
+I will use the following sample `Dockerfile` that you can use to test locally.
 
-```bash
-git clone https://github.com/keycloakify/keycloakify-starter
-cd keycloakify-starter
-yarn install # Or use an other package manager, just be sure to delete the yarn.lock if you use another package manager.
+```Dockerfile
+FROM quay.io/keycloak/keycloak:26.2.3 as builder
+
+## Install the custom theme
+ADD --chown=keycloak:keycloak https://github.com/waynemorphic/mindtech-keycloak/releases/download/v1.0.1/keycloak-theme-for-kc-22-to-25.jar /opt/keycloak/providers/keycloak-theme-for-kc-all-other-versions.jar
+
+FROM quay.io/keycloak/keycloak:26.2.3
+
+COPY --from=builder /opt/keycloak /opt/keycloak
+WORKDIR /opt/keycloak
+
+ENV KC_HOSTNAME_STRICT=false
+ENV KC_HTTPS_PORT=8443
+ENV KC_HTTPS_PROTOCOLS=TLSv1.3,TLSv1.2
+ENV KC_HTTP_ENABLED=true
+ENV KC_HTTP_PORT=8080
+ENV KC_BOOTSTRAP_ADMIN_USERNAME=admin
+ENV KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+ENV BACKGROUND_LOGO_URL=""
+
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
+
 ```
 
-# Testing the theme locally
+## Changing the Theme
 
-[Documentation](https://docs.keycloakify.dev/testing-your-theme)
+Essentially, if you have a Dockerfile where your Keycloak instance is running, you only need to add the following line:
 
-# How to customize the theme
+`ADD --chown=keycloak:keycloak https://github.com/waynemorphic/mindtech-keycloak/releases/download/v1.0.1/keycloak-theme-for-kc-22-to-25.jar /opt/keycloak/providers/keycloak-theme-for-kc-all-other-versions.jar`
 
-[Documentation](https://docs.keycloakify.dev/customization-strategies)
+I have been using GitHub for version control, so the artifact we are using is the one above. So, after rerunning your Dockerfile, go to your Keycloak
+admin panel, navigate to `Realm Settings` > `Themes`. Under `Login Theme`, you should be able to see `Mindtech` from the dropdown list. Select
+it, then click save. Your theme will be picked automatically by Keycloak.
 
-# Building the theme
 
-You need to have [Maven](https://maven.apache.org/) installed to build the theme (Maven >= 3.1.1, Java >= 7).  
-The `mvn` command must be in the $PATH.
+## Background Logo
 
--   On macOS: `brew install maven`
--   On Debian/Ubuntu: `sudo apt-get install maven`
--   On Windows: `choco install openjdk` and `choco install maven` (Or download from [here](https://maven.apache.org/download.cgi))
+The assumption is that you have deployed the logo to a cloud provider or cloud bucket of some sort. So, in the Dockerfile configuration above,
+in the environment variable for `BACKGROUND_LOGO_URL`, you will typically add the URL as a string. 
 
-```bash
-npm run build-keycloak-theme
-```
+However, if you do not prefer using this configuration, in your keycloak admin panel, navigate to, `Realm Settings` > `Realm Overrides` > click `Add Translation`. For the key, add, `backgroundLogoUrl` and for the value, add the URL to your logo only without the "". For this to work, first, make sure to have changed the theme to this custom theme.
 
-Note that by default Keycloakify generates multiple .jar files for different versions of Keycloak.  
-You can customize this behavior, see documentation [here](https://docs.keycloakify.dev/targeting-specific-keycloak-versions).
-
-# Initializing the account theme
-
-```bash
-npx keycloakify initialize-account-theme
-```
-
-# Initializing the email theme
-
-```bash
-npx keycloakify initialize-email-theme
-```
-
-# GitHub Actions
-
-The starter comes with a generic GitHub Actions workflow that builds the theme and publishes
-the jars [as GitHub releases artifacts](https://github.com/keycloakify/keycloakify-starter/releases/tag/v10.0.0).  
-To release a new version **just update the `package.json` version and push**.
-
-To enable the workflow go to your fork of this repository on GitHub then navigate to:
-`Settings` > `Actions` > `Workflow permissions`, select `Read and write permissions`.
