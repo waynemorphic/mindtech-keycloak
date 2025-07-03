@@ -57,7 +57,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         <div className={clsx(kcClsx("kcLoginClass"), "flex flex-col md:flex-row min-h-screen")}>
             <div className={"flex flex-col justify-center items-center md:w-1/2"}>
                 <section className={"md:p-8"}>
-                        {( backgroundLogoUrl || kcContext.properties["BACKGROUND_LOGO_URL"]) && (
+                    {( backgroundLogoUrl || kcContext.properties["BACKGROUND_LOGO_URL"]) && (
                             <div className={"md:mx-auto"} id={"logo"}>
                                 <img src={backgroundLogoUrl || kcContext.properties["BACKGROUND_LOGO_URL"] || "src/login/assets/Mindtech_Logo.svg"} alt={"Mindtech Logo"}/>
                             </div>
@@ -70,8 +70,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     </div>
                 </section>
             </div>
-            <div className={clsx(kcClsx("kcFormCardClass"), "flex flex-col md:w-1/2 bg-[#fff] shadow-xl p-8 md:p-14 md:rounded-tl-2xl md:rounded-bl-2xl")}>
-                <section className={"md:p-2 md:mt-2 md:w-full"}>
+            <div className={clsx(kcClsx("kcFormCardClass"), "flex flex-col md:w-1/2 bg-[#fff] shadow-xl p-8 md:p-14 md:rounded-tl-2xl md:rounded-bl-2xl items-center justify-center")}>
+                <section className={"md:w-full"}>
                 <header className={kcClsx("kcFormHeaderClass")}>
                     {enabledLanguages.length > 1 && (
                         <div className={kcClsx("kcLocaleMainClass")} id="kc-locale">
